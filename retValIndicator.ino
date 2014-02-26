@@ -21,6 +21,11 @@ void light_success() {
   digitalWrite(SUCCESS_LED_PIN, HIGH);
 }
 
+void clear_lights() {
+  digitalWrite(FAILURE_LED_PIN, LOW);
+  digitalWrite(SUCCESS_LED_PIN, LOW);
+}
+
 void clearSerialBuffer() {
   while (Serial.available()) {
     Serial.read();
@@ -36,6 +41,7 @@ void setup() {
 
 void loop() {
   if (!is_switch_on()) {
+    clear_lights();
     clearSerialBuffer();
     delay(100);
     return;
