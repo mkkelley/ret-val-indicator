@@ -35,7 +35,7 @@ void clearSerialBuffer() {
 void setup() {
   pinMode(SUCCESS_LED_PIN, OUTPUT);
   pinMode(FAILURE_LED_PIN, OUTPUT);
-  pinMode(SWITCH_PIN, INPUT);
+  pinMode(SWITCH_PIN, INPUT_PULLUP);
   Serial.begin(9600);
 }
 
