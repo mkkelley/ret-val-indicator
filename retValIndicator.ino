@@ -12,6 +12,11 @@ boolean is_switch_on() {
   return false;
 }
 
+boolean is_clear_switch_on() {
+  int buttonState = digitalRead(CLEAR_SWITCH_PIN);
+  return buttonState == HIGH;
+}
+
 void light_failure() {
   digitalWrite(SUCCESS_LED_PIN, LOW);
   digitalWrite(FAILURE_LED_PIN, HIGH);
@@ -37,6 +42,7 @@ void setup() {
   pinMode(SUCCESS_LED_PIN, OUTPUT);
   pinMode(FAILURE_LED_PIN, OUTPUT);
   pinMode(OFF_SWITCH_PIN, INPUT_PULLUP);
+  pinMode(CLEAR_SWITCH_PIN, INPUT_PULLUP);
   Serial.begin(9600);
 }
 
