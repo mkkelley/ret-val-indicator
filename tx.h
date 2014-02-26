@@ -3,7 +3,12 @@
 
 typedef int tx_t;
 
-tx_t tx_type(byte[]);
+class Transmission {
+public:
+  byte tx[4];
+  Transmission();
+  tx_t type() const;
+};
 
 // use for tx_t == RET
-byte get_ret_tx_val(byte[]);
+byte get_ret_tx_val(Transmission);

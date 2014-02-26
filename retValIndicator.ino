@@ -47,13 +47,10 @@ void loop() {
     return;
   }
   
-  byte transmission[4];
-  for (byte i = 0; i < 4; i++) {
-    transmission[i] = Serial.read();
-  }
+  Transmission tx;
   
-  if (tx_type(transmission)) {
-    byte ret_val = get_ret_tx_val(transmission);
+  if (tx.type() == RET) {
+    byte ret_val = get_ret_tx_val(tx);
     if (ret_val == 0) {
       light_success();
     } else {
