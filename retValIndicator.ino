@@ -1,7 +1,8 @@
 #include "tx.h"
 #define SUCCESS_LED_PIN 2
 #define FAILURE_LED_PIN 3
-#define OFF_SWITCH_PIN 12
+#define OFF_SWITCH_PIN 23
+#define CLEAR_SWITCH_PIN 25
 
 boolean is_switch_on() {
   int buttonState = digitalRead(OFF_SWITCH_PIN);
