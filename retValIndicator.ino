@@ -51,7 +51,7 @@ void loop() {
     return;
   }
   
-  Transmission tx;
+  Transmission tx; //blocks until 4 bytes read
   
   if (tx.type() == RET) {
     byte ret_val = get_ret_tx_val(tx);
