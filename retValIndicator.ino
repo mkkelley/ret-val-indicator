@@ -1,10 +1,10 @@
 #include "tx.h"
 #define SUCCESS_LED_PIN 2
 #define FAILURE_LED_PIN 3
-#define SWITCH_PIN 12
+#define OFF_SWITCH_PIN 12
 
 boolean is_switch_on() {
-  int buttonState = digitalRead(SWITCH_PIN);
+  int buttonState = digitalRead(OFF_SWITCH_PIN);
   if (buttonState == HIGH) {
     return true;
   }
@@ -35,7 +35,7 @@ void clearSerialBuffer() {
 void setup() {
   pinMode(SUCCESS_LED_PIN, OUTPUT);
   pinMode(FAILURE_LED_PIN, OUTPUT);
-  pinMode(SWITCH_PIN, INPUT_PULLUP);
+  pinMode(OFF_SWITCH_PIN, INPUT_PULLUP);
   Serial.begin(9600);
 }
 
