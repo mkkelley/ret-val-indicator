@@ -6,10 +6,7 @@
 
 boolean is_switch_on() {
   int buttonState = digitalRead(OFF_SWITCH_PIN);
-  if (buttonState == HIGH) {
-    return true;
-  }
-  return false;
+  return buttonState == HIGH;
 }
 
 boolean is_clear_switch_on() {
