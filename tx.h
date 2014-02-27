@@ -1,6 +1,7 @@
 #include "Arduino.h"
-#define TX_RET 0
-#define TX_CLEAR 1
+#define TX_GARBLED 0
+#define TX_RET 1
+#define TX_CLEAR 2
 
 typedef int tx_t;
 

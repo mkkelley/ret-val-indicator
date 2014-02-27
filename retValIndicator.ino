@@ -73,12 +73,22 @@ void loop() {
 
   Transmission tx; //blocks until 4 bytes read
 
-  if (tx.type() == TX_RET) {
-    byte ret_val = get_ret_tx_val(tx);
+  byte ret_val;
+  switch (tx.type()) {
+    case TX_RET:
+    ret_val = get_ret_tx_val(tx);
     if (ret_val == 0) {
       light_success();
     } else {
       light_failure();
     }
+    break;
+    case TX_CLEAR:
+    clear_lights();
+    break;
+    default:
+    digitalWrite(13, HIGH);
+    delay(500);
+    digitalWrite(13, LOW);
   }
 }
