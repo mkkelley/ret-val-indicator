@@ -49,8 +49,6 @@ void loop() {
     clear_lights();
     clearSerialBuffer();
     digitalWrite(13, LOW);
-    delay(100);
-    digitalWrite(13, HIGH);
     return;
   }
   Serial.write("so:");
@@ -75,7 +73,7 @@ void loop() {
 
   byte ret_val;
   switch (tx.type()) {
-    case TX_RET:
+  case TX_RET:
     ret_val = get_ret_tx_val(tx);
     if (ret_val == 0) {
       light_success();
@@ -83,12 +81,10 @@ void loop() {
       light_failure();
     }
     break;
-    case TX_CLEAR:
+  case TX_CLEAR:
     clear_lights();
     break;
-    default:
-    digitalWrite(13, HIGH);
-    delay(500);
+  default:
     digitalWrite(13, LOW);
   }
 }
