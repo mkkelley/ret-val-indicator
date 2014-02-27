@@ -3,6 +3,7 @@
 #define FAILURE_LED_PIN 3
 #define OFF_SWITCH_PIN 23
 #define CLEAR_SWITCH_PIN 25
+#define DEBUG true
 
 boolean is_switch_on() {
   int buttonState = digitalRead(OFF_SWITCH_PIN);
@@ -35,6 +36,22 @@ void clearSerialBuffer() {
   }
 }
 
+void write_debug_info() {
+  Serial.write("so:");
+  if (is_switch_on()) {
+    Serial.write("y");
+  } else {
+    Serial.write("n");
+  }
+  Serial.write(" cs:");
+  if (is_clear_switch_on()) {
+    Serial.write("y");
+  } else {
+    Serial.write("n");
+  }
+  Serial.write('\n');
+}
+
 void setup() {
   pinMode(SUCCESS_LED_PIN, OUTPUT);
   pinMode(FAILURE_LED_PIN, OUTPUT);
@@ -51,19 +68,9 @@ void loop() {
     digitalWrite(13, LOW);
     return;
   }
-  Serial.write("so:");
-  if (is_switch_on()) {
-    Serial.write("y");
-  } else {
-    Serial.write("n");
+  if (DEBUG) {
+    write_debug_info();
   }
-  Serial.write(" cs:");
-  if (is_clear_switch_on()) {
-    Serial.write("y");
-  } else {
-    Serial.write("n");
-  }
-  Serial.write('\n');
 
   if (is_clear_switch_on()) {
     clear_lights();
