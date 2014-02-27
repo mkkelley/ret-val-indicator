@@ -38,22 +38,41 @@ void clearSerialBuffer() {
 void setup() {
   pinMode(SUCCESS_LED_PIN, OUTPUT);
   pinMode(FAILURE_LED_PIN, OUTPUT);
-  pinMode(OFF_SWITCH_PIN, INPUT_PULLUP);
-  pinMode(CLEAR_SWITCH_PIN, INPUT_PULLUP);
+  pinMode(OFF_SWITCH_PIN, INPUT);
+  pinMode(CLEAR_SWITCH_PIN, INPUT);
+  pinMode(13, OUTPUT);
   Serial.begin(9600);
 }
 
 void loop() {
+  Serial.write("so:");
+  if (is_switch_on()) {
+    Serial.write("y");
+  } else {
+    Serial.write("n");
+  }
+  Serial.write("cs:");
+  if (is_clear_switch_on()) {
+    Serial.write("y");
+  } else {
+    Serial.write("n");
+  }
   if (!is_switch_on()) {
     clear_lights();
     clearSerialBuffer();
+    digitalWrite(13, LOW);
     delay(100);
+    digitalWrite(13, HIGH);
     return;
   }
   
+  if (is_clear_switch_on()) {
+    clear_lights();
+  }
+
   Transmission tx; //blocks until 4 bytes read
   
-  if (tx.type() == RET) {
+  if (tx.type() == TX_RET) {
     byte ret_val = get_ret_tx_val(tx);
     if (ret_val == 0) {
       light_success();

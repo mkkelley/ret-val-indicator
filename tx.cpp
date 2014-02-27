@@ -12,6 +12,6 @@ Transmission::Transmission() {
 
 tx_t Transmission::type() const {
   if (tx[0] == 'R' && tx[1] == 'E' && tx[2] == 'T') {
-    return RET;
+    return TX_RET;
   }
 }
