@@ -45,18 +45,6 @@ void setup() {
 }
 
 void loop() {
-  Serial.write("so:");
-  if (is_switch_on()) {
-    Serial.write("y");
-  } else {
-    Serial.write("n");
-  }
-  Serial.write("cs:");
-  if (is_clear_switch_on()) {
-    Serial.write("y");
-  } else {
-    Serial.write("n");
-  }
   if (!is_switch_on()) {
     clear_lights();
     clearSerialBuffer();
@@ -65,13 +53,26 @@ void loop() {
     digitalWrite(13, HIGH);
     return;
   }
-  
+  Serial.write("so:");
+  if (is_switch_on()) {
+    Serial.write("y");
+  } else {
+    Serial.write("n");
+  }
+  Serial.write(" cs:");
+  if (is_clear_switch_on()) {
+    Serial.write("y");
+  } else {
+    Serial.write("n");
+  }
+  Serial.write('\n');
+
   if (is_clear_switch_on()) {
     clear_lights();
   }
 
   Transmission tx; //blocks until 4 bytes read
-  
+
   if (tx.type() == TX_RET) {
     byte ret_val = get_ret_tx_val(tx);
     if (ret_val == 0) {
