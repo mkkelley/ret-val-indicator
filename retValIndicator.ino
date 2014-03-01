@@ -7,7 +7,7 @@
 
 boolean is_switch_on() {
   int buttonState = digitalRead(OFF_SWITCH_PIN);
-  return buttonState == HIGH;
+  return buttonState == LOW;
 }
 
 boolean is_clear_switch_on() {
@@ -52,6 +52,15 @@ void write_debug_info() {
   Serial.write('\n');
 }
 
+void blink(int led, int times, int udelay) {
+  for (int i = 0; i < times; ++i) {
+    digitalWrite(led, HIGH);
+    delay(udelay);
+    digitalWrite(led, LOW);
+    delay(udelay);
+  }
+}
+
 void setup() {
   pinMode(SUCCESS_LED_PIN, OUTPUT);
   pinMode(FAILURE_LED_PIN, OUTPUT);
@@ -67,7 +76,10 @@ void loop() {
     clearSerialBuffer();
     digitalWrite(13, LOW);
     return;
+  } else {
+    digitalWrite(13, HIGH);
   }
+
   if (DEBUG) {
     write_debug_info();
   }
@@ -92,6 +104,7 @@ void loop() {
     clear_lights();
     break;
   default:
-    digitalWrite(13, LOW);
+    blink(13, 4, 100);
+    clearSerialBuffer();
   }
 }
