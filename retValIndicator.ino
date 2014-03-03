@@ -6,6 +6,7 @@
 // Interrupt 0 is on pin 2
 #define CLEAR_SWITCH_INTERRUPT 0
 #define DEBUG true
+#define DEBUG_LED 13
 
 boolean is_switch_on() {
   int buttonState = digitalRead(OFF_SWITCH_PIN);
@@ -35,9 +36,8 @@ void clearSerialBuffer() {
   }
 }
 
-volatile static unsigned long bounceTime = 0;
-
 void clearHandler() {
+  volatile static unsigned long bounceTime = 0;
   if (abs(millis() - bounceTime) < BOUNCE_DURATION) {
     return;
   }
@@ -78,14 +78,16 @@ void loop() {
   if (!is_switch_on()) {
     clear_lights();
     clearSerialBuffer();
-    digitalWrite(13, LOW);
     return;
-  } else {
-    digitalWrite(13, HIGH);
   }
 
   if (DEBUG) {
     write_debug_info();
+    if (is_switch_on()) {
+      digitalWrite(DEBUG_LED, HIGH);
+    } else {
+      digitalWrite(DEBUG_LED, LOW);
+    }
   }
 
   Transmission tx; //blocks until 4 bytes read
