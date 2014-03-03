@@ -5,7 +5,7 @@ byte get_ret_tx_val(Transmission tx) {
 }
 
 Transmission::Transmission() {
-  for (byte i = 0; i < 4; i++) {
+  for (byte i = 0; i < TX_LENGTH; i++) {
     while(!Serial.available());
     tx[i] = Serial.read();
   }
