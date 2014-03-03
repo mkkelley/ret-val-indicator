@@ -1,5 +1,5 @@
 #include "tx.h"
-#define BOUNCE_DURATION 200
+#define BOUNCE_DURATION 50
 #define SUCCESS_LED_PIN 4
 #define FAILURE_LED_PIN 5
 // Interrupt 0 is on pin 2
