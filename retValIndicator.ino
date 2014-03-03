@@ -1,18 +1,15 @@
 #include "tx.h"
-#define SUCCESS_LED_PIN 2
-#define FAILURE_LED_PIN 3
+#define BOUNCE_DURATION 200
+#define SUCCESS_LED_PIN 4
+#define FAILURE_LED_PIN 5
 #define OFF_SWITCH_PIN 23
-#define CLEAR_SWITCH_PIN 25
+// Interrupt 0 is on pin 2
+#define CLEAR_SWITCH_INTERRUPT 0
 #define DEBUG true
 
 boolean is_switch_on() {
   int buttonState = digitalRead(OFF_SWITCH_PIN);
   return buttonState == LOW;
-}
-
-boolean is_clear_switch_on() {
-  int buttonState = digitalRead(CLEAR_SWITCH_PIN);
-  return buttonState == HIGH;
 }
 
 void light_failure() {
@@ -25,6 +22,8 @@ void light_success() {
   digitalWrite(SUCCESS_LED_PIN, HIGH);
 }
 
+// The clear button WILL BREAK if this modifies non-volatile
+// variables. (see clearHandler())
 void clear_lights() {
   digitalWrite(FAILURE_LED_PIN, LOW);
   digitalWrite(SUCCESS_LED_PIN, LOW);
@@ -36,15 +35,20 @@ void clearSerialBuffer() {
   }
 }
 
+volatile static unsigned long bounceTime = 0;
+
+void clearHandler() {
+  if (abs(millis() - bounceTime) < BOUNCE_DURATION) {
+    return;
+  }
+  // This WILL BREAK if clear_lights ever modifies any variables
+  clear_lights();
+  bounceTime = millis();
+}
+
 void write_debug_info() {
   Serial.write("so:");
   if (is_switch_on()) {
-    Serial.write("y");
-  } else {
-    Serial.write("n");
-  }
-  Serial.write(" cs:");
-  if (is_clear_switch_on()) {
     Serial.write("y");
   } else {
     Serial.write("n");
@@ -65,8 +69,8 @@ void setup() {
   pinMode(SUCCESS_LED_PIN, OUTPUT);
   pinMode(FAILURE_LED_PIN, OUTPUT);
   pinMode(OFF_SWITCH_PIN, INPUT);
-  pinMode(CLEAR_SWITCH_PIN, INPUT);
   pinMode(13, OUTPUT);
+  attachInterrupt(CLEAR_SWITCH_INTERRUPT, clearHandler, RISING);
   Serial.begin(9600);
 }
 
@@ -82,10 +86,6 @@ void loop() {
 
   if (DEBUG) {
     write_debug_info();
-  }
-
-  if (is_clear_switch_on()) {
-    clear_lights();
   }
 
   Transmission tx; //blocks until 4 bytes read
