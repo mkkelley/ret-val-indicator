@@ -31,7 +31,7 @@ void clearSerialBuffer() {
 }
 
 void clearHandler() {
-  volatile static unsigned long bounceTime = 0;
+  static unsigned long bounceTime = 0;
   if (abs(millis() - bounceTime) < BOUNCE_DURATION) {
     return;
   }
