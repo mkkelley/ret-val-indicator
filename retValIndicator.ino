@@ -2,16 +2,10 @@
 #define BOUNCE_DURATION 200
 #define SUCCESS_LED_PIN 4
 #define FAILURE_LED_PIN 5
-#define OFF_SWITCH_PIN 23
 // Interrupt 0 is on pin 2
 #define CLEAR_SWITCH_INTERRUPT 0
 #define DEBUG true
 #define DEBUG_LED 13
-
-boolean is_switch_on() {
-  int buttonState = digitalRead(OFF_SWITCH_PIN);
-  return buttonState == LOW;
-}
 
 void light_failure() {
   digitalWrite(SUCCESS_LED_PIN, LOW);
@@ -47,13 +41,7 @@ void clearHandler() {
 }
 
 void write_debug_info() {
-  Serial.write("so:");
-  if (is_switch_on()) {
-    Serial.write("y");
-  } else {
-    Serial.write("n");
-  }
-  Serial.write('\n');
+  Serial.write("debug_write\n");
 }
 
 void blink(int led, int times, int udelay) {
@@ -68,26 +56,14 @@ void blink(int led, int times, int udelay) {
 void setup() {
   pinMode(SUCCESS_LED_PIN, OUTPUT);
   pinMode(FAILURE_LED_PIN, OUTPUT);
-  pinMode(OFF_SWITCH_PIN, INPUT);
   pinMode(13, OUTPUT);
   attachInterrupt(CLEAR_SWITCH_INTERRUPT, clearHandler, RISING);
   Serial.begin(9600);
 }
 
 void loop() {
-  if (!is_switch_on()) {
-    clear_lights();
-    clearSerialBuffer();
-    return;
-  }
-
   if (DEBUG) {
     write_debug_info();
-    if (is_switch_on()) {
-      digitalWrite(DEBUG_LED, HIGH);
-    } else {
-      digitalWrite(DEBUG_LED, LOW);
-    }
   }
 
   Transmission tx; //blocks until 4 bytes read
