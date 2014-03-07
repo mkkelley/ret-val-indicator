@@ -1,7 +1,28 @@
 #include <stdio.h>
 #include <sys/socket.h>
-#include <strings.h>
+#include <string.h>
 #include <netinet/in.h>
+#include <fcntl.h>
+#include <stdlib.h>
+
+char const * const arduino_port = "/dev/ttyACM0";
+
+int open_arduino() {
+    int arduino = open("/dev/ttyACM0", O_RDWR | O_NDELAY | O_NOCTTY);
+    if (arduino == -1) {
+        char err[1000] = {0};
+        strncat(err, "Could not find arduino at ", 1000);
+        strncat(err, arduino_port, 1000);
+        perror(err);
+        exit(-1);
+    }
+    fcntl(arduino, F_SETFL, 0);
+    return arduino;
+}
+
+int close_arduino(int arduino) {
+    close(arduino);
+}
 
 int main(void) {
     int socket_fd, n;
