@@ -50,6 +50,8 @@ int main(void) {
         sendto(socket_fd, line, n, 0, (struct sockaddr *)&caddr, len);
         line[n] = 0;
         fputs(line, stdout);
+
+        // Truncate the '\n' from the input when writing to the arduino
         write(arduino, line, n - 1);
     }
 
