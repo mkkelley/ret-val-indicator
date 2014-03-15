@@ -43,12 +43,14 @@ int main(void) {
     bind(socket_fd, (struct sockaddr *)&saddr, sizeof(saddr));
 
     printf("Server running\n");
+    int arduino = open_arduino();
     while(1) {
         len = sizeof(caddr);
         n = recvfrom(socket_fd, line, 128, 0, (struct sockaddr *)&caddr, &len);
         sendto(socket_fd, line, n, 0, (struct sockaddr *)&caddr, len);
         line[n] = 0;
         fputs(line, stdout);
+        write(arduino, line, n - 1);
     }
 
     return 0;
